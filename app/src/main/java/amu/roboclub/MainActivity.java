@@ -17,11 +17,15 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import amu.roboclub.Object.Key;
 import amu.roboclub.Object.Keys;
 import amu.roboclub.Object.User;
+import amu.roboclub.Object.Users;
 
 public class MainActivity extends AppCompatActivity {
     private String TAG = MainActivity.class.getSimpleName();
+    private Users users = new Users();
+    private Key keys[] = new Key[4];
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,8 +51,12 @@ public class MainActivity extends AppCompatActivity {
         keyReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                Keys keys = dataSnapshot.getValue(Keys.class);
-                Log.d (TAG, keys.getKey1().getCurrent());
+                Keys key = dataSnapshot.getValue(Keys.class);
+                keys[0] = key.getKey1();
+                keys[1] = key.getKey2();
+                keys[2] = key.getKey3();
+                keys[3] = key.getKey4();
+                Log.d (TAG, key.getKey1().getCurrent());
             }
 
             @Override
@@ -65,6 +73,15 @@ public class MainActivity extends AppCompatActivity {
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 User user = dataSnapshot.getValue(User.class);
                 Log.d(TAG,user.getName());
+                users.addEntry(user.getUid(),user);
+                try{
+                    User u = users.getUser(keys[0].getCurrent());
+                    Log.d(TAG + "checking name", u.getName());
+                }
+                catch (NullPointerException e){
+                    e.printStackTrace();
+                }
+
             }
 
             @Override

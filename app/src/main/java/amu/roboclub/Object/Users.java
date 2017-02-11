@@ -7,7 +7,7 @@ import java.util.HashMap;
  */
 
 public class Users {
-    private HashMap<String, User> userMap;
+    private HashMap<String, User> userMap = new HashMap<>();
 
     public HashMap<String, User> getUserMap() {
         return userMap;
@@ -17,7 +17,7 @@ public class Users {
         this.userMap = userMap;
     }
     public void addEntry(String uid, User user){
-        if(!isUser(uid))
+        if(!isUser(uid) && user != null)
             userMap.put(uid,user);
     }
     public boolean isUser(String uid){
