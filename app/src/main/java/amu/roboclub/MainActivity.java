@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -17,6 +18,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import amu.roboclub.Object.Keys;
+import amu.roboclub.Object.User;
 
 public class MainActivity extends AppCompatActivity {
     private String TAG = MainActivity.class.getSimpleName();
@@ -37,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         getKeyDatabase();
+        getUserDatabase();
     }
     public void getKeyDatabase(){
         FirebaseDatabase keyDatabase = FirebaseDatabase.getInstance();
@@ -53,5 +56,36 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+    }
+    public void getUserDatabase(){
+        FirebaseDatabase userDatabase = FirebaseDatabase.getInstance();
+        DatabaseReference userReference = userDatabase.getReference("/users");
+        userReference.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                User user = dataSnapshot.getValue(User.class);
+                Log.d(TAG,user.getName());
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        }) ;
     }
 }
